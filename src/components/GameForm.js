@@ -13,7 +13,7 @@ const initialState = {
   numberOfPlayers: 0,
   title: '',
   maker: '',
-  gameTypeId: 0,
+  gameType: 0,
 };
 
 const GameForm = ({ user }) => {
