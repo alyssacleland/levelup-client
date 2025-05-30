@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 // import { clientCredentials } from '../utils/client';
 import { clientCredentials } from '../client';
 
@@ -34,4 +35,31 @@ const getGameTypes = () =>
       .catch(reject);
   });
 
-export { getGames, createGame, getGameTypes };
+const updateGame = (payload) =>
+  new Promise((resolve, reject) => {
+    fetch(`${clientCredentials.databaseURL}/games/${payload.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.status === 204) {
+          resolve();
+        } else {
+          return response.json().then(resolve);
+        }
+      })
+      .catch(reject);
+  });
+
+const getGameById = (id) =>
+  new Promise((resolve, reject) => {
+    fetch(`${clientCredentials.databaseURL}/games/${id}`)
+      .then((response) => response.json())
+      .then(resolve)
+      .catch(reject);
+  });
+
+export { getGames, createGame, getGameTypes, updateGame, getGameById };
