@@ -27,7 +27,7 @@ export default function EventsPage() {
       <article className="events">
         {events.map((event) => (
           <section key={`event--${event.id}`} className="event">
-            <EventCard game={event.game} description={event.description} date={event.date} time={event.time} organizer={event.organizer} />
+            <EventCard id={event.id} game={event.game} description={event.description} date={event.date} time={event.time} organizer={event.organizer} />
           </section>
         ))}
       </article>
