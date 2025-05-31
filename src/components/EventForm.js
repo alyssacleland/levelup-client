@@ -7,16 +7,16 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { getGames } from '../utils/sample-data/gameData';
-import { createEvent } from '../utils/sample-data/eventData';
+import { createEvent, updateEvent } from '../utils/sample-data/eventData';
 
 const initialState = {
-  gameId: 0,
+  game: 0,
   description: '',
   date: '',
   time: '',
 };
 
-const EventForm = ({ user }) => {
+const EventForm = ({ user, eventObj = initialState }) => {
   const [games, setGames] = useState([]);
   /*
   Since the input fields are bound to the values of
@@ -34,6 +34,12 @@ const EventForm = ({ user }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (eventObj) {
+      setCurrentEvent(eventObj);
+    }
+  }, [eventObj]);
+
   const handleChange = (e) => {
     // TODO: Complete the onChange function
     const { name, value } = e.target;
@@ -50,6 +56,7 @@ const EventForm = ({ user }) => {
     const event = {
       // i changed gamer below to match my existing model
       // current game is the state variable, so it's gettihng the values from the form input!
+      id: currentEvent.id,
       game: currentEvent.game,
       description: currentEvent.description,
       date: currentEvent.date,
@@ -58,7 +65,11 @@ const EventForm = ({ user }) => {
     };
 
     // Send POST request to your API
-    createEvent(event).then(() => router.push('/events'));
+    if (eventObj?.id) {
+      updateEvent(event).then(() => router.push('/events'));
+    } else {
+      createEvent(event).then(() => router.push('/events'));
+    }
   };
 
   return (
@@ -86,7 +97,7 @@ const EventForm = ({ user }) => {
       <Form.Group className="mb-3">
         <Form.Label>Game</Form.Label>
         <Form.Select name="game" required value={currentEvent.game} onChange={handleChange}>
-          <option value="">Select a game type</option>
+          <option value="">Select a game</option>
           {games.map((game) => (
             <option key={game.id} value={game.id}>
               {game.title}
@@ -96,7 +107,7 @@ const EventForm = ({ user }) => {
       </Form.Group>
 
       <Button variant="primary" type="submit">
-        Submit
+        {eventObj.id ? 'Update' : 'Create'} Event
       </Button>
     </Form>
   );
@@ -106,6 +117,12 @@ EventForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
+  eventObj: PropTypes.shape({
+    gameId: PropTypes.number,
+    description: PropTypes.string,
+    date: PropTypes.string,
+    time: PropTypes.string,
+  }),
 };
 
 export default EventForm;

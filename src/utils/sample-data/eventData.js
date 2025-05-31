@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { clientCredentials } from '../client';
 
 const getEvents = () =>
@@ -23,4 +24,31 @@ const createEvent = (game) =>
       .catch(reject);
   });
 
-export { getEvents, createEvent };
+const updateEvent = (payload) =>
+  new Promise((resolve, reject) => {
+    fetch(`${clientCredentials.databaseURL}/events/${payload.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.status === 204) {
+          resolve();
+        } else {
+          return response.json().then(resolve);
+        }
+      })
+      .catch(reject);
+  });
+
+const getEventById = (id) =>
+  new Promise((resolve, reject) => {
+    fetch(`${clientCredentials.databaseURL}/events/${id}`)
+      .then((response) => response.json())
+      .then(resolve)
+      .catch(reject);
+  });
+
+export { getEvents, createEvent, updateEvent, getEventById };
