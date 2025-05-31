@@ -51,4 +51,13 @@ const getEventById = (id) =>
       .catch(reject);
   });
 
-export { getEvents, createEvent, updateEvent, getEventById };
+const deleteEvent = (id) =>
+  new Promise((resolve, reject) => {
+    fetch(`${clientCredentials.databaseURL}/events/${id}`, {
+      method: 'DELETE',
+    })
+      .then(resolve)
+      .catch(reject);
+  });
+
+export { getEvents, createEvent, updateEvent, getEventById, deleteEvent };

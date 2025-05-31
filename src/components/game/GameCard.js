@@ -9,6 +9,7 @@ function GameCard({
   maker,
   numberOfPlayers,
   skillLevel,
+  deleteThisGame,
 }) {
   const router = useRouter();
   return (
@@ -25,6 +26,9 @@ function GameCard({
         >
           Edit
         </Button>
+        <Button onClick={() => deleteThisGame(id)} variant="danger">
+          Delete
+        </Button>
       </Card.Body>
       <Card.Footer className="text-muted">Skill Level: {skillLevel}</Card.Footer>
     </Card>
@@ -37,6 +41,7 @@ GameCard.propTypes = {
   maker: PropTypes.string.isRequired,
   numberOfPlayers: PropTypes.number.isRequired,
   skillLevel: PropTypes.number.isRequired,
+  deleteThisGame: PropTypes.func.isRequired,
 };
 
 export default GameCard;

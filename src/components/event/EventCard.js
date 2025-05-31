@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
-export default function EventCard({ id, game, description, date, time, organizer }) {
+export default function EventCard({ id, game, description, date, time, organizer, deleteThisEvent }) {
   const router = useRouter();
+
   return (
     <div>
       <Card className="text-center">
@@ -24,6 +25,9 @@ export default function EventCard({ id, game, description, date, time, organizer
           >
             Edit
           </Button>
+          <Button onClick={() => deleteThisEvent(id)} variant="danger">
+            Delete
+          </Button>
         </Card.Body>
         <Card.Footer className="text-muted">{description}</Card.Footer>
       </Card>
@@ -38,4 +42,5 @@ EventCard.propTypes = {
   date: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   organizer: PropTypes.string.isRequired,
+  deleteThisEvent: PropTypes.func.isRequired,
 };

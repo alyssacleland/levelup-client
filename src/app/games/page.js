@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import GameCard from '@/components/game/GameCard';
-import { getGames } from '@/utils/sample-data/gameData';
+import { getGames, deleteGame } from '@/utils/sample-data/gameData';
 import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
@@ -13,6 +13,10 @@ export default function GamesPage() {
   useEffect(() => {
     getGames().then(setGames);
   }, []);
+
+  const deleteThisGame = (id) => {
+    deleteGame(id).then(() => getGames().then(setGames));
+  };
 
   return (
     <>
@@ -28,7 +32,7 @@ export default function GamesPage() {
         <h1>Games</h1>
         {games.map((game) => (
           <section key={`game--${game.id}`} className="game">
-            <GameCard id={game.id} title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} />
+            <GameCard id={game.id} title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} deleteThisGame={deleteThisGame} />
           </section>
         ))}
       </article>
