@@ -1,10 +1,14 @@
 /* eslint-disable consistent-return */
 import { clientCredentials } from '../client';
 
-const getEvents = () =>
+const getEvents = (uid) =>
   // eslint-disable-next-line no-new
   new Promise((resolve, reject) => {
-    fetch(`${clientCredentials.databaseURL}/events`)
+    fetch(`${clientCredentials.databaseURL}/events`, {
+      headers: {
+        Authorization: uid,
+      },
+    })
       .then((response) => response.json())
       .then(resolve)
       .catch(reject);
@@ -60,4 +64,32 @@ const deleteEvent = (id) =>
       .catch(reject);
   });
 
-export { getEvents, createEvent, updateEvent, getEventById, deleteEvent };
+const joinEvent = (eventId, uid, setEvents) => {
+  // TODO: Write the POST fetch request to join and event
+  fetch(`${clientCredentials.databaseURL}/events/${eventId}/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: uid,
+    },
+    body: JSON.stringify({}),
+  })
+    .then(() => getEvents(uid))
+    .then(setEvents);
+};
+
+const leaveEvent = (eventId, uid, setEvents) => {
+  // TODO: Write the DELETE fetch request to leave an event
+  fetch(`${clientCredentials.databaseURL}/events/${eventId}/leave`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: uid,
+    },
+    body: JSON.stringify({}),
+  })
+    .then(() => getEvents(uid))
+    .then(setEvents);
+};
+
+export { getEvents, createEvent, updateEvent, getEventById, deleteEvent, joinEvent, leaveEvent };
